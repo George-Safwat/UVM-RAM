@@ -1,0 +1,183 @@
+Coverage Report by file with details
+
+=================================================================================
+=== File: ram/rtl/RAM.sv
+=================================================================================
+Statement Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Stmts                           10        10         0     100.0
+
+================================Statement Details================================
+
+Statement Coverage for file ram/rtl/RAM.sv --
+
+    1                                                module RAM (ram_interface.DUT intf);
+    2                                                
+    3                                                reg [7:0] MEM [255:0];
+    4                                                reg [7:0] Rd_Addr, Wr_Addr;
+    5                                                
+    6               1                      30001     always @(posedge intf.clk) begin
+    7                                                    if (!intf.rst_n) begin
+    8               1                       1482             intf.dout <= 0;
+    9               1                       1482             intf.tx_valid <= 0;
+    10              1                       1482             Rd_Addr <= 0;
+    11              1                       1482             Wr_Addr <= 0;
+    12                                                   end
+    13                                                   else  begin  //put begin & end                                    
+    14                                                       if (intf.rx_valid) begin
+    15                                                           case (intf.din[9:8])
+    16              1                       6996                     2'b00 : Wr_Addr <= intf.din[7:0];
+    17              1                       6553                     2'b01 : MEM[Wr_Addr] <= intf.din[7:0];
+    18              1                       7033                     2'b10 : Rd_Addr <= intf.din[7:0];
+    19              1                       6477                     2'b11 : intf.dout <= MEM[Rd_Addr]; //bug MEM[Rd_Addr] instead of MEM[Wr_Addr]
+    20              1                          E                     default : intf.dout <= 0;
+    21                                                           endcase
+    22                                                       end
+    23              1                      28519             intf.tx_valid <= (intf.din[9] && intf.din[8])? 1'b1 : 1'b0;  //Deleting dependancy on rx_valid 
+    24                                                   end
+    25                                               end       
+    26                                               
+    27                                               endmodule
+
+Branch Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Branches                         8         8         0     100.0
+
+================================Branch Details================================
+
+Branch Coverage for file ram/rtl/RAM.sv --
+
+------------------------------------IF Branch------------------------------------
+    7                                      30001     Count coming in to IF
+    7               1                       1482         if (!intf.rst_n) begin
+    13              1                      28519         else  begin  //put begin & end                                    
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------IF Branch------------------------------------
+    14                                     28519     Count coming in to IF
+    14              1                      27059             if (intf.rx_valid) begin
+                                            1460     All False Count
+Branch totals: 2 hits of 2 branches = 100.0%
+
+------------------------------------CASE Branch------------------------------------
+    15                                     27059     Count coming in to CASE
+    16              1                       6996                     2'b00 : Wr_Addr <= intf.din[7:0];
+    17              1                       6553                     2'b01 : MEM[Wr_Addr] <= intf.din[7:0];
+    18              1                       7033                     2'b10 : Rd_Addr <= intf.din[7:0];
+    19              1                       6477                     2'b11 : intf.dout <= MEM[Rd_Addr]; //bug MEM[Rd_Addr] instead of MEM[Wr_Addr]
+    20              1                          E                     default : intf.dout <= 0;
+Branch totals: 4 hits of 4 branches = 100.0%
+
+
+Condition Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Condition Terms              0         0         0     100.0
+Expression Coverage:
+    Enabled Coverage            Active   Covered    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FEC Expression Terms             2         2         0     100.0
+
+================================Expression Details================================
+
+Expression Coverage for file ram/rtl/RAM.sv --
+
+----------------Focused Expression View-----------------
+Line       23 Item    1  (intf.din[9] && intf.din[8])
+Expression totals: 2 of 2 input terms covered = 100.0%
+
+   Input Term   Covered  Reason for no coverage   Hint
+  -----------  --------  -----------------------  --------------
+  intf.din[9]         Y
+  intf.din[8]         Y
+
+     Rows:       Hits  FEC Target            Non-masking condition(s)      
+ ---------  ---------  --------------------  -------------------------     
+  Row   1:          1  intf.din[9]_0         -                             
+  Row   2:          1  intf.din[9]_1         intf.din[8]                   
+  Row   3:          1  intf.din[8]_0         intf.din[9]                   
+  Row   4:          1  intf.din[8]_1         intf.din[9]                   
+
+
+FSM Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    FSMs                                                       100.0
+        States                       0         0         0     100.0
+        Transitions                  0         0         0     100.0
+Toggle Coverage:
+    Enabled Coverage            Active      Hits    Misses % Covered
+    ----------------            ------      ----    ------ ---------
+    Toggle Bins                     32        32         0     100.0
+
+================================Toggle Details================================
+
+Toggle Coverage for File ram/rtl/RAM.sv --
+
+       Line                                   Node      1H->0L      0L->1H  "Coverage"
+--------------------------------------------------------------------------------------
+          4                             Wr_Addr[7]           1           1      100.00 
+          4                             Wr_Addr[6]           1           1      100.00 
+          4                             Wr_Addr[5]           1           1      100.00 
+          4                             Wr_Addr[4]           1           1      100.00 
+          4                             Wr_Addr[3]           1           1      100.00 
+          4                             Wr_Addr[2]           1           1      100.00 
+          4                             Wr_Addr[1]           1           1      100.00 
+          4                             Wr_Addr[0]           1           1      100.00 
+          4                             Rd_Addr[7]           1           1      100.00 
+          4                             Rd_Addr[6]           1           1      100.00 
+          4                             Rd_Addr[5]           1           1      100.00 
+          4                             Rd_Addr[4]           1           1      100.00 
+          4                             Rd_Addr[3]           1           1      100.00 
+          4                             Rd_Addr[2]           1           1      100.00 
+          4                             Rd_Addr[1]           1           1      100.00 
+          4                             Rd_Addr[0]           1           1      100.00 
+
+Total Node Count     =         16 
+Toggled Node Count   =         16 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =      100.0% (32 of 32 bins)
+
+
+DIRECTIVE COVERAGE:
+---------------------------------------------------------------------------------------------
+Name                                     Design Design   Lang File(Line)      Count Status    
+                                         Unit   UnitType                                      
+---------------------------------------------------------------------------------------------
+/\top#DUT /binding_all/cover_reset       SVA    Verilog  SVA  ram/rtl/Assertions.sv(6)
+                                                                               1482 Covered   
+/\top#DUT /binding_all/cover_tx_valid    SVA    Verilog  SVA  ram/rtl/Assertions.sv(13)
+                                                                              20627 Covered   
+/\top#DUT /binding_all/cover_tx_valid_fell 
+                                         SVA    Verilog  SVA  ram/rtl/Assertions.sv(19)
+                                                                               2052 Covered   
+/\top#DUT /binding_all/cover_wr_add_to_wr_data 
+                                         SVA    Verilog  SVA  ram/rtl/Assertions.sv(25)
+                                                                              16620 Covered   
+/\top#DUT /binding_all/cover_rd_add_to_rd_data 
+                                         SVA    Verilog  SVA  ram/rtl/Assertions.sv(31)
+                                                                              16457 Covered   
+
+TOTAL DIRECTIVE COVERAGE: 100.0%  COVERS: 5
+
+ASSERTION RESULTS:
+-------------------------------------------------------
+Name                 File(Line)           Failure Pass 
+                                          Count   Count 
+-------------------------------------------------------
+/\top#DUT /binding_all/Assert_reset
+                     ram/rtl/Assertions.sv(5)       0     1
+/\top#DUT /binding_all/Assert_tx_valid
+                     ram/rtl/Assertions.sv(12)       0     1
+/\top#DUT /binding_all/Assert_tx_valid_fell
+                     ram/rtl/Assertions.sv(18)       0     1
+/\top#DUT /binding_all/Assert_wr_add_to_wr_data
+                     ram/rtl/Assertions.sv(24)       0     1
+/\top#DUT /binding_all/Assert_rd_add_to_rd_data
+                     ram/rtl/Assertions.sv(30)       0     1
+
+Total Coverage By File (code coverage only, filtered view): 100.0%
+
